@@ -199,8 +199,8 @@
       <div class="container">
         <div class="main">
           <div class="hero-title">Dinodev.cn</div>
-          <p class="subtitle">前后端开发文档</p>
-          <p class="tagline">一个开源免费的10X速快开发框架</p>
+          <p class="subtitle">前端快速开发框架</p>
+          <p class="tagline">基于Vue3框架开发 · 10X倍速开发</p>
         </div>
         <div class="logo">
           <div class="logo-wrapper">
