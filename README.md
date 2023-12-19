@@ -5,7 +5,7 @@
 ## 🦖 Dino Vue3 Framework
 Dino-vue3是基于Vue3开发的前端框架，和Dino-spring框架配合，实现更高效的功能开发。
 
-[详细开发文档](https://dinodev.cn/dino-vue3//)https://dinodev.cn/dino-vue3/
+[详细开发文档](https://dinodev.cn/dino-vue3/)https://dinodev.cn/dino-vue3/
 
 ## 🎯 开发主张
 
