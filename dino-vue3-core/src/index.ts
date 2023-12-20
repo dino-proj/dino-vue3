@@ -7,6 +7,6 @@ export * from './utils'
 export * from './message'
 export * from './api'
 
-export const setupDinoJsBase = (): void => {
+export const setupDinoCore = (): void => {
   // TODO
 }
