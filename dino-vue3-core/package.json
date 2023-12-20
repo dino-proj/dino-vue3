@@ -4,6 +4,7 @@
   "version": "1.0.6",
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
+  "homepage": "https://dinodev.cn/dino-vue3/core/",
   "keywords": [
     "vue3",
     "dino-vue3-core",
