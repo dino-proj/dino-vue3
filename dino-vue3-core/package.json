@@ -21,6 +21,13 @@
     "README.md",
     "LICENSE"
   ],
+  "tags": [
+    "vue3",
+    "dino-vue3-core",
+    "dino",
+    "dino-dev",
+    "dino-vue3"
+  ],
   "publishConfig": {
     "access": "public"
   },
