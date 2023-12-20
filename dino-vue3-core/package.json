@@ -1,7 +1,7 @@
 {
   "name": "@dino-dev/vue3-core",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "dino dev framework javascript sdk base",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "author": "Cody Lu",
@@ -17,7 +17,9 @@
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
