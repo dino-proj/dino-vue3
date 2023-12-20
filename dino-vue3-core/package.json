@@ -1,11 +1,11 @@
 {
   "name": "@dino-dev/vue3-core",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "dino dev framework javascript sdk base",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "author": "Cody Lu",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
