@@ -4,6 +4,13 @@
   "version": "1.0.6",
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
+  "keywords": [
+    "vue3",
+    "dino-vue3-core",
+    "dino",
+    "dino-dev",
+    "dino-vue3"
+  ],
   "author": "Cody Lu",
   "license": "Apache-2.0",
   "main": "./dist/index.umd.cjs",
@@ -20,13 +27,6 @@
     "dist",
     "README.md",
     "LICENSE"
-  ],
-  "tags": [
-    "vue3",
-    "dino-vue3-core",
-    "dino",
-    "dino-dev",
-    "dino-vue3"
   ],
   "publishConfig": {
     "access": "public"
