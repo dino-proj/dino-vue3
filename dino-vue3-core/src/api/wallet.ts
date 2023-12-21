@@ -9,16 +9,15 @@ export interface WalletInfo {
   sign: string
 }
 
-export interface Bills{
+export interface Bills {
   id: string
   from: string
   to: string
   amount: string
   timestamp: number
   status: string
-
 }
 
 export interface WalletApi {
   getWalletInfo: () => Promise<WalletInfo>
-} 
+}
