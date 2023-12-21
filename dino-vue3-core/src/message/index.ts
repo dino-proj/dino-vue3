@@ -39,7 +39,7 @@ export function useMessage(msgType: MessageType): MessageFun
 export function useMessage(msgType?: MessageType): MessageFun | MessageHandler {
   const _msg = inject(MessageSymbol, msg)
   if (isNil(_msg)) {
-    throw new Error('Please use `setupMessage()` or `provide("")` first before call `useMessage()`')
+    throw new Error('Please use `setupMessage()` or `provide(MessageSymbol, v)` first before call `useMessage()`')
   }
   if (!isNil(msgType)) {
     return _msg[msgType]
