@@ -3,8 +3,8 @@
 
 import { extend } from 'lodash-es'
 import { ApiHeaderType, ApiParamType, ApiReqeust, ProxyConfig } from './types'
-import { Tenant } from 'src/common'
-import { AuthToken } from 'src/auth'
+import { Tenant } from '../common'
+import { AuthToken } from '../auth'
 
 /**
  * Api配置类型

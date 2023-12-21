@@ -8,7 +8,7 @@ import { asArray } from '../utils'
 import { stringify } from 'qs'
 import { useMessage } from '../message'
 import { isEmpty } from 'lodash-es'
-import { Tenant } from 'src/common'
+import { Tenant } from '../common'
 
 /**
  * 创建一个新的Axios请求对象
