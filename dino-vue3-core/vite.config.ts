@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: (format) => `dino-vue3-core.${format}.js`
     },
     rollupOptions: {
-      external: ['vue', 'axios'],
+      external: ['vue', '@vue/runtime-core', 'axios'],
       output: {
         globals: {
           vue: 'Vue'
