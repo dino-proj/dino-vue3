@@ -755,10 +755,30 @@
     path-browserify "^1.0.1"
     vue-template-compiler "^2.7.14"
 
+"@vue/reactivity@3.3.13":
+  version "3.3.13"
+  resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.3.13.tgz#9b1dff3b523a69997b66cba2f86f83839e8285fb"
+  integrity sha512-fjzCxceMahHhi4AxUBzQqqVhuA21RJ0COaWTbIBl1PruGW1CeY97louZzLi4smpYx+CHfFPPU/CS8NybbGvPKQ==
+  dependencies:
+    "@vue/shared" "3.3.13"
+
+"@vue/runtime-core@^3.3.13":
+  version "3.3.13"
+  resolved "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.3.13.tgz#e8414218e8c7db94acfcec6fd12044704adda9cf"
+  integrity sha512-1TzA5TvGuh2zUwMJgdfvrBABWZ7y8kBwBhm7BXk8rvdx2SsgcGfz2ruv2GzuGZNvL1aKnK8CQMV/jFOrxNQUMA==
+  dependencies:
+    "@vue/reactivity" "3.3.13"
+    "@vue/shared" "3.3.13"
+
 "@vue/shared@3.3.12", "@vue/shared@^3.3.0":
   version "3.3.12"
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.3.12.tgz#7c030c4e2f1db8beb638b159cbb86d0ff78c3198"
   integrity sha512-6p0Yin0pclvnER7BLNOQuod9Z+cxSYh8pSh7CzHnWNjAIP6zrTlCdHRvSCb1aYEx6i3Q3kvfuWU7nG16CgG1ag==
+
+"@vue/shared@3.3.13":
+  version "3.3.13"
+  resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.3.13.tgz#4cb73cda958d77ffd389c8640cf7d93a10ac676f"
+  integrity sha512-/zYUwiHD8j7gKx2argXEMCUXVST6q/21DFU0sTfNX0URJroCe3b1UF6vLJ3lQDfLNIiiRl2ONp7Nh5UVWS6QnA==
 
 "@yarn-tool/resolve-package@^1.0.40":
   version "1.0.47"
