@@ -11,11 +11,11 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'DinoJsBase',
-      fileName: 'index'
+      name: 'DinoVue3Core',
+      fileName: (format) => `dino-vue3-core.${format}.js`
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'axios'],
       output: {
         globals: {
           vue: 'Vue'

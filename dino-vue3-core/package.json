@@ -5,6 +5,9 @@
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "homepage": "https://dinodev.cn/dino-vue3/core/",
+  "bugs": {
+    "url": "https://github.com/dino-proj/dino-vue3/issues"
+  },
   "keywords": [
     "vue3",
     "dino-vue3-core",
@@ -14,13 +17,13 @@
   ],
   "author": "Cody Lu",
   "license": "Apache-2.0",
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/dino-vue3-core.umd.js",
+  "module": "./dist/dino-vue3-core.es.js",
+  "types": "./dist/dino-vue3-core.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "import": "./dist/dino-vue3-core.es.js",
+      "require": "./dist/dino-vue3-core.umd.js"
     }
   },
   "files": [
@@ -73,8 +76,7 @@
     "@typescript-eslint/parser": "^6.14.0",
     "axios": ">=0.23.0",
     "eslint": "^8.56.0",
-    "eslint-config-prettier": "^6.14.0",
-    "prettier": "^2.4.1",
+    "prettier": "^3.1.1",
     "rimraf": "^5.0.5",
     "rollup": "^2.54.0",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -95,6 +97,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.12.0"
+    "node": ">=18.0.0"
   }
 }

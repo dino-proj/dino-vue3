@@ -1,12 +1,12 @@
 // Copyright 2023 dinosdev.cn.
 // SPDX-License-Identifier: MIT
 
-module.exports = {
+const config = {
   printWidth: 180,
   tabWidth: 2,
   useTabs: false,
   semi: false,
-  vueIndentScriptAndStyle: false,
+  vueIndentScriptAndStyle: true,
   singleQuote: true,
   quoteProps: 'as-needed',
   bracketSpacing: true,
@@ -20,3 +20,5 @@ module.exports = {
   endOfLine: 'auto',
   rangeStart: 0
 }
+
+export default config

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 /** @type {import('eslint').Linter.Config} */
-module.exports = {
+export default {
   root: true,
   parserOptions: {
     parser: '@babel/eslint-parser',
