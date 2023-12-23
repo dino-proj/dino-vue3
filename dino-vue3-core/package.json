@@ -1,7 +1,7 @@
 {
   "name": "@dino-dev/vue3-core",
   "type": "module",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "homepage": "https://dinodev.cn/dino-vue3/core/",
@@ -17,13 +17,17 @@
   ],
   "author": "Cody Lu",
   "license": "Apache-2.0",
-  "main": "./dist/dino-vue3-core.umd.js",
-  "module": "./dist/dino-vue3-core.es.js",
-  "types": "./dist/dino-vue3-core.d.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/*.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/dino-vue3-core.es.js",
-      "require": "./dist/dino-vue3-core.umd.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./axios.js": {
+      "import": "./dist/axios.es.js",
+      "require": "./dist/axios.cjs.js"
     }
   },
   "files": [
@@ -59,7 +63,8 @@
   },
   "dependencies": {
     "is-ip": "^3.1.0",
-    "lodash-es": ">=4.17.15"
+    "lodash-es": ">=4.17.15",
+    "qs": "^6.11.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
