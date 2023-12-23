@@ -1,12 +1,50 @@
 // Copyright 2023 dinosdev.cn.
 // SPDX-License-Identifier: MIT
 
-
 /**
  * id KEY的类型
  */
-
 export type IdKeyType = string | number
+
+/**
+ * Vo基础类型
+ */
+export interface VoBase<K = IdKeyType> {
+  /**
+   * 对象 ID
+   */
+  id: K
+
+  /**
+   * 对象创建时间戳，unix时间戳，到毫秒
+   */
+  createAt: number
+
+  /**
+   * 对象更新时间戳，unix时间戳，到毫秒
+   */
+  updateAt: number
+
+  /**
+   * 对象创建者
+   */
+  createBy: string
+  /**
+   * 用户status
+   */
+  status: number
+}
+
+/**
+ * 可排序对象，带排序码
+ */
+export interface Orderable {
+  /**
+   * 排序号
+   */
+  orderNum?: number
+}
+
 /**
  * 租户信息
  */
@@ -52,7 +90,6 @@ export interface UserInfo<K = IdKeyType> {
   status: number
 }
 
-
 /**
  * GeoPoint
  */
@@ -73,7 +110,7 @@ export interface GeoPoint {
  * 地址信息
  */
 
-export interface Address extends  Partial<GeoPoint> {
+export interface Address extends Partial<GeoPoint> {
   /**
    * 省份
    */
@@ -98,7 +135,6 @@ export interface Address extends  Partial<GeoPoint> {
    * 详细地址
    */
   detail: string
-
 }
 
 /**
@@ -147,7 +183,6 @@ export interface Range<T> {
  */
 export type TimePeriod = Range<number>
 
-
 /**
  * ValueLabel类型
  */
@@ -166,7 +201,7 @@ export interface ValueLabel<T = IdKeyType> {
 /**
  * Option类型
  */
-export interface Option<T= IdKeyType> {
+export interface Option<T = IdKeyType> {
   /**
    * 选项值
    */
@@ -212,7 +247,6 @@ export interface OptionGroup<T = string | number> {
    */
   desc?: string
 }
-
 
 /**
  * 文件Type类型
