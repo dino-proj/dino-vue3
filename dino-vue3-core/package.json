@@ -1,7 +1,7 @@
 {
   "name": "@dino-dev/vue3-core",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "homepage": "https://dinodev.cn/dino-vue3/core/",
@@ -25,7 +25,7 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js"
     },
-    "./axios.js": {
+    "./axios": {
       "import": {
         "types": "./dist/axios.d.ts",
         "default": "./dist/axios.es.js"
