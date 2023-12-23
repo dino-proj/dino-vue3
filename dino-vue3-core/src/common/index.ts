@@ -46,6 +46,11 @@ export interface Orderable {
 }
 
 /**
+ * 添加排序码
+ */
+export type withOrderable<T> = T & Orderable
+
+/**
  * 租户信息
  */
 export interface Tenant {
