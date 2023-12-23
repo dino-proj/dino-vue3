@@ -103,7 +103,7 @@ export type withTenantable<T> = T & Tenantable
 /**
  * 用户信息
  */
-export interface UserInfo<K extends IdKeyType> {
+export interface User<K extends IdKeyType> {
   /**
    * 用户ID
    */
