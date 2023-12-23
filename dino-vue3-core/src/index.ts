@@ -21,7 +21,7 @@ export interface DinoCoreConfig {
   /**
    * 用于处理api请求
    *
-   * @default {@link setupApi}
+   * @default 参见 api 模块 {@link setupApi}
    */
   api?: ApiConfig
 
