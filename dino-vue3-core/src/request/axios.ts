@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { ApiConfig } from './config'
-import { ApiReqeust, ApiResponse } from './types'
+import { ApiConfig } from '../api/config'
+import { ApiReqeust, ApiResponse } from '../api/types'
 import { asArray } from '../utils'
 import { stringify } from 'qs'
 import { useMessage } from '../message'
