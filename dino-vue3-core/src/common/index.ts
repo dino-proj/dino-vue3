@@ -9,7 +9,7 @@ export type IdKeyType = string | number
 /**
  * Vo基础类型
  */
-export interface VoBase<K = IdKeyType> {
+export interface VoBase<K extends IdKeyType> {
   /**
    * 对象 ID
    */
@@ -34,6 +34,11 @@ export interface VoBase<K = IdKeyType> {
    */
   status: number
 }
+
+/**
+ * 添加VoBase扩展
+ */
+export type withVoBase<T, K extends IdKeyType> = T & VoBase<K>
 
 /**
  * 可排序对象，带排序码
@@ -81,9 +86,24 @@ export interface Tenant {
 }
 
 /**
+ * 分租户，添加租户ID信息
+ */
+export interface Tenantable {
+  /**
+   * 租户ID
+   */
+  tenantId: string
+}
+
+/**
+ * 添加租户ID
+ */
+export type withTenantable<T> = T & Tenantable
+
+/**
  * 用户信息
  */
-export interface UserInfo<K = IdKeyType> {
+export interface UserInfo<K extends IdKeyType> {
   /**
    * 用户ID
    */
@@ -118,7 +138,6 @@ export interface UserInfo<K = IdKeyType> {
 /**
  * GeoPoint
  */
-
 export interface GeoPoint {
   /**
    * 坐标点：经度
@@ -211,7 +230,7 @@ export type TimePeriod = Range<number>
 /**
  * ValueLabel类型
  */
-export interface ValueLabel<T = IdKeyType> {
+export interface ValueLabel<T extends IdKeyType> {
   /**
    * 值
    */
@@ -226,7 +245,7 @@ export interface ValueLabel<T = IdKeyType> {
 /**
  * Option类型
  */
-export interface Option<T = IdKeyType> {
+export interface Option<T extends IdKeyType> {
   /**
    * 选项值
    */
@@ -256,7 +275,7 @@ export interface Option<T = IdKeyType> {
 /**
  * OptionGroup类型
  */
-export interface OptionGroup<T = string | number> {
+export interface OptionGroup<T extends IdKeyType> {
   /**
    * 分组名称
    */
@@ -281,7 +300,7 @@ export type FileType = 'image' | 'video' | 'audio' | 'file' | 'document'
 /**
  * 文件Meta信息
  */
-export interface FileInfo<FT = FileType> {
+export interface FileInfo<FT extends FileType> {
   /**
    * 文件名称
    */
