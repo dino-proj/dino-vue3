@@ -11,8 +11,25 @@ export * from './message'
 export * from './api'
 
 export interface DinoCoreConfig {
+  /**
+   * 用于处理消息提示
+   *
+   * @default nopMessageFun 忽略提示
+   */
   message?: MessageHandler
+
+  /**
+   * 用于处理api请求
+   *
+   * @default {@link setupApi}
+   */
   api?: ApiConfig
+
+  /**
+   * 用于执行网络请求的初始化函数
+   *
+   * @see {@link useAxios}
+   */
   apiRequest: (api: ApiConfig) => ApiReqeust
 }
 
