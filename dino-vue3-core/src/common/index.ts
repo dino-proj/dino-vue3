@@ -49,10 +49,30 @@ export interface Orderable {
  * 租户信息
  */
 export interface Tenant {
+  /**
+   * 其他扩展属性
+   */
   [K: string]: any
+
+  /**
+   * 租户ID
+   */
   id: string
+
+  /**
+   * 租户名称
+   */
   name: string
-  logo: string
+
+  /**
+   * 租户简称
+   */
+  shortName: string
+
+  /**
+   * 租户logo
+   */
+  iconUrl: string
 }
 
 /**
