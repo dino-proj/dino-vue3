@@ -1,7 +1,7 @@
 {
   "name": "@dino-dev/vue3-core",
   "type": "module",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "dino dev front framework, dino-vue3-core library",
   "repository": "https://github.com/dino-proj/dino-vue3",
   "homepage": "https://dinodev.cn/dino-vue3/core/",
@@ -29,6 +29,16 @@
       "import": "./dist/axios.es.js",
       "require": "./dist/axios.cjs.js",
       "types": "./dist/axios.d.ts"
+    },
+    "./uni": {
+      "import": "./dist/uni.es.js",
+      "require": "./dist/uni.cjs.js",
+      "types": "./dist/uni.d.ts"
+    },
+    "./wx": {
+      "import": "./dist/wx.es.js",
+      "require": "./dist/wx.cjs.js",
+      "types": "./dist/wx.d.ts"
     }
   },
   "typesVersions": {
@@ -61,18 +71,12 @@
     "mitt": ">=3.0.0",
     "nprogress": ">=1.0.0-1",
     "pinia": ">=2.0.4",
-    "qs": ">=6.10.3",
     "web-storage-cache": ">=1.1.1"
   },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
     }
-  },
-  "dependencies": {
-    "is-ip": "^3.1.0",
-    "lodash-es": ">=4.17.15",
-    "qs": "^6.11.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
@@ -89,8 +93,12 @@
     "@typescript-eslint/parser": "^6.14.0",
     "@vue/runtime-core": "^3.3.13",
     "axios": ">=0.23.0",
+    "axios-miniprogram-adapter": "^0.3.5",
     "eslint": "^8.56.0",
+    "is-ip": "^3.1.0",
+    "lodash-es": ">=4.17.15",
     "prettier": "^3.1.1",
+    "qs": "^6.11.2",
     "rimraf": "^5.0.5",
     "rollup": "^2.54.0",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -99,6 +107,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
     "typescript": "^5.3.3",
+    "uniapp-axios-adapter": "^0.3.2",
     "vite": "^5.0.10",
     "vite-plugin-dts": "^3.6.4"
   },
