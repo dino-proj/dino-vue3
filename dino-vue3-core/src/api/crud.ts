@@ -7,7 +7,11 @@ import { get, post, postPage } from './basic'
 import { IdKeyType, VoBase } from '../common'
 import { asArray } from '../utils'
 
-type ToEditType<RESP> = Omit<RESP, 'id' | keyof VoBase<IdKeyType>>
+/**
+ * 编辑参数类型，去掉id和VoBase中的字段
+ */
+export type ToEditType<RESP, EXCLUDE_PROP extends keyof any = never> = Omit<RESP, EXCLUDE_PROP & 'id' & keyof VoBase<IdKeyType>>
+
 /**
  * List接口类型
  * @param <RESP> 返回类型
