@@ -11,8 +11,8 @@ import { ApiFetchConfig, ApiGetConfig, ApiPageResponse, ApiParamType, ApiPostCon
  * @param param 请求配置信息
  * @returns Promise对象
  */
-export const fetch = <Type>({ url, method, headers, params, data, contentType, responseType, timeout, onProgress, baseURL }: ApiFetchConfig): Promise<Type> => {
-  return useRequest()({
+export const fetch = async <RESP>({ url, method, headers, params, data, contentType, responseType, timeout, onProgress, baseURL }: ApiFetchConfig): Promise<RESP> => {
+  const res = await useRequest()({
     baseURL,
     url,
     method: method || 'get',
@@ -26,13 +26,11 @@ export const fetch = <Type>({ url, method, headers, params, data, contentType, r
     timeout,
     onUploadProgress: onProgress,
     onDownloadProgress: onProgress
-  }).then((res) => {
-    if (res.status !== 200) {
-      throw new Error(res.statusText)
-    }
-    // 读取data，转换对象的key为驼峰形式
-    return toCamleObject(res.data)
   })
+  if (res.status !== 200) {
+    throw new Error(res.statusText)
+  }
+  return toCamleObject(res.data)
 }
 
 /**
@@ -40,8 +38,8 @@ export const fetch = <Type>({ url, method, headers, params, data, contentType, r
  * @param config 请求配置信息
  * @returns Promise对象
  */
-export const upload = <Type>(config: ApiUploadConfig): Promise<ApiResponse<Type>> => {
-  return fetch<ApiResponse<Type>>({
+export const upload = <RESP>(config: ApiUploadConfig): Promise<ApiResponse<RESP>> => {
+  return fetch<ApiResponse<RESP>>({
     url: config.url,
     baseURL: config.baseURL,
     method: config.method || 'post',
@@ -60,8 +58,8 @@ export const upload = <Type>(config: ApiUploadConfig): Promise<ApiResponse<Type>
  * @param config 请求配置信息
  * @returns
  */
-export const get = <Type>(config: ApiGetConfig): Promise<ApiResponse<Type>> => {
-  return fetch<ApiResponse<Type>>({
+export const get = <RESP>(config: ApiGetConfig): Promise<ApiResponse<RESP>> => {
+  return fetch<ApiResponse<RESP>>({
     url: config.url,
     baseURL: config.baseURL,
     method: 'get',
@@ -77,8 +75,8 @@ export const get = <Type>(config: ApiGetConfig): Promise<ApiResponse<Type>> => {
  * @param config 请求配置信息
  * @returns
  */
-export const post = <Type>(config: ApiPostConfig): Promise<ApiResponse<Type>> => {
-  return fetch<ApiResponse<Type>>({
+export const post = <RESP>(config: ApiPostConfig): Promise<ApiResponse<RESP>> => {
+  return fetch<ApiResponse<RESP>>({
     url: config.url,
     baseURL: config.baseURL,
     method: 'post',
@@ -93,11 +91,12 @@ export const post = <Type>(config: ApiPostConfig): Promise<ApiResponse<Type>> =>
 
 /**
  * 分页Get函数
+ * <RESP> 返回类型
  * @param config 请求配置信息
  * @returns
  */
-export const getPage = <Type>(config: ApiGetConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<Type>> => {
-  return fetch<ApiPageResponse<Type>>({
+export const getPage = <RESP>(config: ApiGetConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<RESP>> => {
+  return fetch<ApiPageResponse<RESP>>({
     url: config.url,
     baseURL: config.baseURL,
     method: 'get',
@@ -113,8 +112,8 @@ export const getPage = <Type>(config: ApiGetConfig & { page: Pageable; sort?: So
  * @param config 请求配置信息
  * @returns
  */
-export const postPage = <Type>(config: ApiPostConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<Type>> => {
-  return fetch<ApiPageResponse<Type>>({
+export const postPage = <RESP>(config: ApiPostConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<RESP>> => {
+  return fetch<ApiPageResponse<RESP>>({
     url: config.url,
     baseURL: config.baseURL,
     method: 'post',
@@ -129,85 +128,88 @@ export const postPage = <Type>(config: ApiPostConfig & { page: Pageable; sort?: 
 
 /**
  * 定义一个Upload函数
- * @param <R> 返回类型
- * @param <T> 请求参数的类型
+ * @param <RESP> 返回类型
+ * @param <PARAM> 请求参数的类型
  * @param config 请求的配置信息
  * @param defaultParam 请求的默认参数
  * @returns 一个请求函数
  */
-export const defineUploadApi = <R = any, T = ApiParamType>(
+export const defineUploadApi = <RESP = any, PARAM = ApiParamType>(
   config: Omit<ApiUploadConfig, 'params' | 'data'>,
-  defaultParam?: Partial<T>
-): ((data: FormData, params?: T, onProgress?: ApiUploadConfig['onProgress']) => Promise<ApiResponse<R>>) => {
-  return (data: FormData, param?: T, onProgress?: ApiUploadConfig['onProgress']): Promise<ApiResponse<R>> => {
-    return upload<R>({ ...config, params: extend({}, defaultParam, param), data, onProgress: onProgress ?? config.onProgress })
+  defaultParam?: Partial<PARAM>
+): ((data: FormData, params?: PARAM, onProgress?: ApiUploadConfig['onProgress']) => Promise<ApiResponse<RESP>>) => {
+  return (data: FormData, param?: PARAM, onProgress?: ApiUploadConfig['onProgress']): Promise<ApiResponse<RESP>> => {
+    return upload<RESP>({ ...config, params: extend({}, defaultParam, param), data, onProgress: onProgress ?? config.onProgress })
   }
 }
 
 /**
  * 定义一个Get函数
- * @param <R> 返回类型
- * @param <D> Form数据的类型
- * @param <T> 请求参数的类型
+ * @param <RESP> 返回类型
+ * @param <DATA> Form数据的类型
+ * @param <PARAM> 请求参数的类型
  * @param config 请求的配置信息
  * @param defaultParam 请求的默认参数
  * @returns 一个请求函数
  */
-export const defineGetApi = <R = any, T = ApiParamType>(config: Omit<ApiGetConfig, 'params'>, defaultParam?: Partial<T>): ((params?: T) => Promise<ApiResponse<R>>) => {
-  return (param?: T): Promise<ApiResponse<R>> => {
-    return get<R>({ ...config, params: extend({}, defaultParam, param) })
+export const defineGetApi = <RESP = any, PARAM = ApiParamType>(
+  config: Omit<ApiGetConfig, 'params'>,
+  defaultParam?: Partial<PARAM>
+): ((params?: PARAM) => Promise<ApiResponse<RESP>>) => {
+  return (param?: PARAM): Promise<ApiResponse<RESP>> => {
+    return get<RESP>({ ...config, params: extend({}, defaultParam, param) })
   }
 }
 
 /**
  * 定义一个分页Get函数
- * @param <R> 返回类型
- * @param <T> 请求参数的类型
+ * @param <RESP> 返回类型
+ * @param <PARAM> 请求参数的类型
  * @param config 请求的配置信息
  * @param defaultParam 请求的默认参数
  * @returns 一个分页请求函数
  */
-export const defineGetPageApi = <R = any, T = ApiParamType>(
+export const defineGetPageApi = <RESP = any, PARAM = ApiParamType>(
   config: Omit<ApiGetConfig, 'params'>,
-  defaultParam?: Partial<T>
-): ((params: T, page: Pageable, sort?: Sortable) => Promise<ApiPageResponse<R>>) => {
-  return (params: T, page: Pageable, sort?: Sortable): Promise<ApiPageResponse<R>> => {
-    return getPage<R>({ ...config, params: extend({}, defaultParam, params), page, sort })
+  defaultParam?: Partial<PARAM>
+): ((params: PARAM, page: Pageable, sort?: Sortable) => Promise<ApiPageResponse<RESP>>) => {
+  return (params: PARAM, page: Pageable, sort?: Sortable): Promise<ApiPageResponse<RESP>> => {
+    return getPage<RESP>({ ...config, params: extend({}, defaultParam, params), page, sort })
   }
 }
 
 /**
  * 定义一个Post函数
- * @param <R> 返回类型
- * @param <D> Post数据的类型
- * @param <T> 请求参数的类型
+ * @param <RESP> 返回类型
+ * @param <DATA> Post数据的类型
+ * @param <PARAM> 请求参数的类型
  * @param config 请求的配置信息
  * @param defaultParam 请求的默认参数
  * @returns 一个请求函数
  */
-export const definePostApi = <R = any, D = ApiParamType, T = ApiParamType>(
+export const definePostApi = <RESP = any, DATA = ApiParamType, PARAM = ApiParamType>(
   config: Omit<ApiPostConfig, 'params' | 'data'>,
-  defaultParam?: Partial<T>
-): ((data: D, params?: T) => Promise<ApiResponse<R>>) => {
-  return (data: D, param?: T): Promise<ApiResponse<R>> => {
-    return post<R>({ ...config, params: extend({}, defaultParam, param), data })
+  defaultParam?: Partial<PARAM>
+): ((data: DATA, params?: PARAM) => Promise<ApiResponse<RESP>>) => {
+  return (data: DATA, param?: PARAM): Promise<ApiResponse<RESP>> => {
+    return post<RESP>({ ...config, params: extend({}, defaultParam, param), data })
   }
 }
 
 /**
  * 定义一个分页Post函数
- * @param <R> 返回类型
- * @param <D> Post数据的类型
- * @param <T> 请求参数的类型
+ * @param <RESP> 返回类型
+ * @param <DATA> Post数据的类型
+ * @param <PARAM> 请求参数的类型
  * @param config 请求的配置信息
  * @param defaultParam 请求的默认参数
  * @returns 一个分页请求函数
  */
-export const definePostPageApi = <R, D = ApiParamType, T = ApiParamType>(
+export const definePostPageApi = <RESP, DATA = ApiParamType, PARAM = ApiParamType>(
   config: Omit<ApiPostConfig, 'params' | 'data'>,
-  defaultParam?: Partial<T>
-): ((data: D, page: Pageable, params?: T, sort?: Sortable) => Promise<ApiPageResponse<R>>) => {
-  return (data: D, page: Pageable, param?: T, sort?: Sortable): Promise<ApiPageResponse<R>> => {
-    return postPage<R>({ ...config, params: extend({}, defaultParam, param), data, page, sort })
+  defaultParam?: Partial<PARAM>
+): ((data: DATA, page: Pageable, params?: PARAM, sort?: Sortable) => Promise<ApiPageResponse<RESP>>) => {
+  return (data: DATA, page: Pageable, param?: PARAM, sort?: Sortable): Promise<ApiPageResponse<RESP>> => {
+    return postPage<RESP>({ ...config, params: extend({}, defaultParam, param), data, page, sort })
   }
 }
