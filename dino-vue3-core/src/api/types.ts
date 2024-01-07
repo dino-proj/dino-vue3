@@ -1,37 +1,98 @@
 // Copyright 2023 dinosdev.cn.
 // SPDX-License-Identifier: MIT
 
+/**
+ * Api请求参数类型
+ */
 export type ApiParamType = Record<string, any>
 
 /**
  * http请求头类型
  */
-export type ApiHeaderType = Record<string, string | string[] | number | boolean | null>
+export type HttpHeaderType = Record<string, string | string[] | number | boolean | null>
 
 /**
  * 基础认证类型
  */
 export interface BasicCredentials {
+  /**
+   * 用户名
+   */
   username: string
+
+  /**
+   * 密码
+   */
   password: string
 }
 
 export interface ProxyConfig {
+  /**
+   * 代理主机
+   */
   host: string
+
+  /**
+   * 代理端口
+   */
   port: number
+
+  /**
+   * 代理授权信息
+   */
   auth?: BasicCredentials
-  protocol?: string
+
+  /**
+   * 代理协议
+   * @default http
+   */
+  protocol?: 'http' | 'https' | 'socks4' | 'socks5'
 }
 
 export interface RequestProgressEvent {
+  /**
+   * 上传或下载的字节数
+   */
   loaded: number
+
+  /**
+   * 总字节数
+   */
   total?: number
+
+  /**
+   * 上传或下载进度(%)，0-100
+   */
   progress?: number
+
+  /**
+   * 上传或下载速率，单位为字节/秒
+   */
   bytes: number
+
+  /**
+   * 上传或下载速率，单位为字节/秒
+   */
   rate?: number
+
+  /**
+   * 上传或下载剩余时间，单位为秒
+   */
   estimated?: number
+
+  /**
+   * 是否为上传
+   */
   upload?: boolean
+
+  /**
+   * 是否为下载
+   */
   download?: boolean
+
+  /**
+   * 事件对象
+   */
   event?: any
 }
 
@@ -43,7 +104,7 @@ export interface RequestConfig<D = any> {
   url?: string
   method?: RequestMethod | string
   baseURL?: string
-  headers?: ApiHeaderType
+  headers?: HttpHeaderType
   params?: any
   data?: D
   timeout?: number
@@ -62,15 +123,15 @@ export interface HttpResponse<T = any, D = any> {
   data: T
   status: number
   statusText: string
-  headers: ApiHeaderType
+  headers: HttpHeaderType
   config: RequestConfig<D>
-  request?: ApiReqeust
+  request?: HttpRequest
 }
 
 /**
  * Api请求函数类型
  */
-export interface ApiReqeust {
+export interface HttpRequest {
   <T = any, R = HttpResponse<T>, D = any>(config: RequestConfig<D>): Promise<R>
   <T = any, R = HttpResponse<T>, D = any>(url: string, config?: RequestConfig<D>): Promise<R>
 }
@@ -92,7 +153,7 @@ export interface ApiReqeust {
  */
 export interface ApiGetConfig {
   url: string
-  headers?: ApiHeaderType
+  headers?: HttpHeaderType
   params?: ApiParamType
   responseType?: ResponseType
   timeout?: number
