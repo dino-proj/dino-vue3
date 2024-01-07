@@ -1,7 +1,7 @@
 // Copyright 2023 dinosdev.cn.
 // SPDX-License-Identifier: MIT
 
-import { ApiConfig, ApiReqeust, setupApi } from './api'
+import { ApiConfig, HttpRequest, setupApi } from './api'
 import { MessageFun, MessageHandler, setupMessage } from './message'
 
 export * from './common'
@@ -30,7 +30,7 @@ export interface DinoCoreConfig {
    *
    * @see {@link useAxios}
    */
-  apiRequest: (api: ApiConfig) => ApiReqeust
+  requestProvider: (api: ApiConfig) => HttpRequest
 }
 
 const nopMessageFun: MessageFun = () => {
@@ -48,5 +48,5 @@ export const setupDinoCore = (config: DinoCoreConfig): void => {
   setupMessage(config.message ?? nopMessageHandler)
 
   // setup the api request
-  setupApi(config.apiRequest, config.api)
+  setupApi(config.requestProvider, config.api)
 }
