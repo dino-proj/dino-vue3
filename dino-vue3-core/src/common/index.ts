@@ -153,7 +153,6 @@ export interface GeoPoint {
 /**
  * 地址信息
  */
-
 export interface Address extends Partial<GeoPoint> {
   /**
    * 省份
@@ -186,12 +185,12 @@ export interface Address extends Partial<GeoPoint> {
  */
 export interface Contact {
   /**
-   * 姓名
+   * 联系人姓名
    */
   name: string
 
   /**
-   * 手机号
+   * 联系人手机号
    */
   phone: string
 }
@@ -199,7 +198,6 @@ export interface Contact {
 /**
  * 地点信息
  */
-
 export interface Place extends Partial<GeoPoint> {
   /**
    * 地点名称
@@ -209,21 +207,24 @@ export interface Place extends Partial<GeoPoint> {
 
 /**
  * Range类型
+ * @param T 范围类型，如：number、string、Date等
  */
 export interface Range<T> {
   /**
-   * 开始值
+   * 开始值，包含，如：[begin, end)；
+   * 若begin为null则代表：(+∞, end)
    */
-  begin: T
+  begin?: T
 
   /**
-   * 结束值
+   * 结束值，不包含，如：[begin, end]；
+   * 若end为null则代表：[begin, +∞)
    */
-  end: T
+  end?: T
 }
 
 /**
- * TimePeriod类型，到毫秒的unix时间戳
+ * TimePeriod类型，到秒的unix时间戳
  */
 export type TimePeriod = Range<number>
 
