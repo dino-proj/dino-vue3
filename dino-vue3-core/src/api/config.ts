@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { extend } from 'lodash-es'
-import { ApiHeaderType, ApiParamType, ApiReqeust, ProxyConfig } from './types'
+import { HttpHeaderType, ApiParamType, HttpRequest, ProxyConfig } from './types'
 import { Tenant } from '../common'
 import { AuthToken } from '../auth'
 
@@ -16,7 +16,7 @@ export interface ApiConfig {
   baseUrl: string
 
   /**
-   * 接口请求超时时间(毫秒)，默认：60s
+   * 接口请求超时时间(毫秒)，默认：-1，表示不设置超时
    */
   requestTimeout: number
 
@@ -50,45 +50,56 @@ export interface ApiConfig {
 
   /**
    * 接口请求默认的headers
+   * @default {}
    */
-  defaultHeaders?: ApiHeaderType
+  defaultHeaders?: HttpHeaderType
 
   /**
    * 接口请求默认的url参数
+   * @default {}
    */
   defaultParams?: ApiParamType
 
   /**
    * 是否开启代理
+   * @default false
    */
   proxy?: ProxyConfig | false
 }
 
 export const defaultApiConfig: ApiConfig = {
   baseUrl: '',
-  requestTimeout: 60000,
+  requestTimeout: -1,
   successCode: 0,
   needLoginCode: [630],
   tenant: () => null,
   authToken: () => null,
-  autoLogin: () => Promise.reject(new Error('autoLogin not implemented'))
+  autoLogin: () => Promise.reject(new Error('autoLogin not implemented')),
+  defaultHeaders: {},
+  defaultParams: {},
+  proxy: false
 }
 
+/**
+ * Request Provider函数类型
+ */
+export type RequestProvider = (config: ApiConfig) => HttpRequest
+
 let apiConfig: ApiConfig = { ...defaultApiConfig }
-let request: ApiReqeust = null
+let request: HttpRequest = null
 /**
  * 配置API
  * @param config api配置
  */
-export const setupApi = (initer: (config: ApiConfig) => ApiReqeust, config?: Partial<ApiConfig>) => {
+export const setupApi = (requestProvider: RequestProvider, config?: Partial<ApiConfig>) => {
   if (config) {
     apiConfig = extend(apiConfig, config)
   }
 
-  request = initer(apiConfig)
+  request = requestProvider(apiConfig)
 }
 
-export const useRequest = (): ApiReqeust => {
+export const useRequest = (): HttpRequest => {
   if (!request) {
     throw new Error('Please call `setupApi()` before useRequest')
   }
