@@ -10,12 +10,24 @@ export default defineConfig({
     outDir: resolve(__dirname, 'dist'),
     minify: false,
     lib: {
-      entry: [resolve(__dirname, 'src/index.ts'), resolve(__dirname, 'src/request/axios.ts')],
+      entry: [
+        // 入口文件
+        resolve(__dirname, 'src/index.ts'),
+        resolve(__dirname, 'src/request/axios.ts'),
+        resolve(__dirname, 'src/request/uni.ts'),
+        resolve(__dirname, 'src/request/wx.ts')
+      ],
       name: 'DinoVue3Core',
       fileName: (format, entry) => `${entry}.${format}.js`
     },
     rollupOptions: {
-      external: ['vue', '@vue/runtime-core', 'axios', 'lodash-es'],
+      external: [
+        // externals that should not be bundled
+        'vue',
+        '@vue/runtime-core',
+        'lodash-es',
+        'axios'
+      ],
       output: {
         globals: {
           vue: 'Vue',
