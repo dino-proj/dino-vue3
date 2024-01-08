@@ -4,6 +4,9 @@
 import { get, postPage } from './basic'
 import { ApiPageResponse, ApiParamType, ApiResponse, Pageable } from './types'
 
+/**
+ * 定义树访问接口
+ */
 export interface TreeApi<Type = any> {
   getTree: (parentId: string | number) => Promise<ApiResponse<Type>>
   getPickerTree: (parentId: string | number) => Promise<ApiResponse<Type>>
@@ -31,6 +34,7 @@ export const defineTreeApi = <Type = any>(path: string): TreeApi<Type> => {
   return {
     getTree,
     getPickerTree,
-    getSearch
+    getSearch,
+    getOptions
   }
 }
