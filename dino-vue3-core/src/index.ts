@@ -33,19 +33,29 @@ export interface DinoCoreConfig {
   requestProvider: (api: ApiConfig) => HttpRequest
 }
 
-const nopMessageFun: MessageFun = () => {
-  console.warn('Please use `setupDinoCore({msgHandlers:H})` or `provide(MessageSymbol)` first before call `useMessage()`')
-}
-const nopMessageHandler: MessageHandler = {
-  success: nopMessageFun,
-  info: nopMessageFun,
-  warning: nopMessageFun,
-  error: nopMessageFun
+const warnTips = 'default `consoleMessageHandler` used \nPlease `setupDinoCore({msgHandlers:H})` or `setupMessage(msgHandlers)` first before call `useMessage()`'
+const consoleMessageHandler: MessageHandler = {
+  success: (msg) => {
+    console.warn(warnTips)
+    console.log('success: ' + msg)
+  },
+  info: (msg) => {
+    console.warn(warnTips)
+    console.log('info: ' + msg)
+  },
+  warning: (msg) => {
+    console.warn(warnTips)
+    console.warn('warn: ' + msg)
+  },
+  error: (msg) => {
+    console.warn(warnTips)
+    console.error('error: ' + msg)
+  }
 }
 
 export const setupDinoCore = (config: DinoCoreConfig): void => {
   // setup the message handler
-  setupMessage(config.message ?? nopMessageHandler)
+  setupMessage(config.message ?? consoleMessageHandler)
 
   // setup the api request
   setupApi(config.requestProvider, config.api)
