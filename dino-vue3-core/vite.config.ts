@@ -26,7 +26,9 @@ export default defineConfig({
         'vue',
         '@vue/runtime-core',
         'lodash-es',
-        'axios'
+        'axios',
+        'uniapp-axios-adapter',
+        'axios-miniprogram-adapter'
       ],
       output: {
         globals: {
