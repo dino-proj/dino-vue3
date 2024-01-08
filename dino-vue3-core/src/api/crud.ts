@@ -8,11 +8,11 @@ import { IdKeyType, VoBase } from '../common'
 import { asArray } from '../utils'
 
 /**
- * 编辑参数类型，去掉<T>中的id和VoBase中的字段
+ * 编辑参数类型，去掉<T>中的id和VoBase中的字段，以及EXTRA_PROPS中的字段
  * @param <T> 编辑参数类型
  * @param <EXTRA_PROPS> 其他要排除的字段
  */
-export type ToEditType<T, EXTRA_PROPS extends keyof any = never> = Omit<T, EXTRA_PROPS & 'id' & keyof VoBase<IdKeyType>>
+export type ToEditType<T, EXTRA_PROPS extends keyof any = never> = Omit<T, EXTRA_PROPS | 'id' | keyof VoBase<IdKeyType>>
 
 /**
  * List接口类型
