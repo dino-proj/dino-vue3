@@ -12,7 +12,7 @@ import { asArray } from '../utils'
  * @param <T> 编辑参数类型
  * @param <EXTRA_PROPS> 其他要排除的字段
  */
-export type ToEditType<T, EXTRA_PROPS extends keyof any = never> = Omit<T, EXTRA_PROPS | 'id' | keyof VoBase<IdKeyType>>
+export type ToEditType<T, EXTRA_PROPS extends keyof any = never> = Omit<T, EXTRA_PROPS | 'id' | keyof VoBase<never>>
 
 /**
  * List接口类型
