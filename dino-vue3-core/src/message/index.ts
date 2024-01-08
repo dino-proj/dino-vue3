@@ -3,8 +3,6 @@
 
 import { isNil } from 'lodash-es'
 
-import { InjectionKey, inject, provide } from '@vue/runtime-core'
-
 export declare type MessageFun = (msg: string, options?: any) => void
 
 /**
@@ -16,11 +14,6 @@ export interface MessageHandler {
   warning: MessageFun
   error: MessageFun
 }
-
-/**
- * 消息提示接口Symbol, 用于InjectionKey
- */
-export const MessageSymbol: InjectionKey<MessageHandler> = Symbol()
 
 /**
  * 消息类型
@@ -37,7 +30,7 @@ let msg: MessageHandler
 export function useMessage(): MessageHandler
 export function useMessage(msgType: MessageType): MessageFun
 export function useMessage(msgType?: MessageType): MessageFun | MessageHandler {
-  const _msg = inject(MessageSymbol, msg)
+  const _msg = msg
   if (isNil(_msg)) {
     throw new Error('Please use `setupMessage()` or `provide(MessageSymbol, v)` first before call `useMessage()`')
   }
