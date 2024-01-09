@@ -34,13 +34,13 @@ export interface ApiConfig {
    * 获取租户信息函数
    * @returns null表示不需要租户信息
    */
-  tenant?: () => Tenant
+  tenant?: () => Tenant | undefined
 
   /**
    * 获取登录凭证函数
    * @returns null表示不需要登录凭证
    */
-  authToken?: () => AuthToken
+  authToken?: () => AuthToken | undefined
 
   /**
    * 自动登录函数
