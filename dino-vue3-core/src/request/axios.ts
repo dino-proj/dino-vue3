@@ -52,24 +52,33 @@ export const axiosWithAdapter = (adapter?: AxiosRequestConfig['adapter']): Reque
 
     // response 拦截器
     service.interceptors.response.use(
-      (response: AxiosResponse) => {
-        const data = response.data as ApiResponse<any>
+      (response: AxiosResponse): Promise<AxiosResponse> => {
+        return new Promise<AxiosResponse>((resolve, reject) => {
+          const data = response.data as ApiResponse<any>
 
-        if (successCode.indexOf(data.code) >= 0) {
-          return response.data
-        } else if (needLoginCode.indexOf(data.code) >= 0) {
-          return config
-            .autoLogin()
-            .then(() => {
-              return service(response.config)
-            })
-            .catch((reason) => {
-              useMessage().error(reason.message)
-            })
-        } else {
-          useMessage().error(data.msg)
-          return Promise.reject(data)
-        }
+          if (successCode.indexOf(data.code) >= 0) {
+            resolve(response)
+          } else if (needLoginCode.indexOf(data.code) >= 0) {
+            return config
+              .autoLogin()
+              .then(() => {
+                service(response.config)
+                  .then((resp) => {
+                    resolve(resp)
+                  })
+                  .catch((reason) => {
+                    reject(reason)
+                  })
+              })
+              .catch((reason) => {
+                useMessage().error(reason.message)
+                reject(reason)
+              })
+          } else {
+            useMessage().error(data.msg)
+            return reject(response)
+          }
+        })
       },
       (error: AxiosError) => {
         console.log(error.code, 'err:' + error) // for debug
