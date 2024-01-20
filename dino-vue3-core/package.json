@@ -68,15 +68,21 @@
   "peerDependencies": {
     "dayjs": ">=1.10.7",
     "lodash-es": ">=4.17.15",
-    "mitt": ">=3.0.0",
-    "nprogress": ">=1.0.0-1",
-    "pinia": ">=2.0.4",
-    "web-storage-cache": ">=1.1.1"
+    "axios": ">=0.23.0",
+    "pinia": ">=2.0.4"
   },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
+    },
+    "axios": {
+      "optional": true
     }
+  },
+  "dependencies": {
+    "is-ip": "^3.1.0",
+    "qs": "^6.11.2",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
@@ -95,10 +101,7 @@
     "axios": ">=0.23.0",
     "axios-miniprogram-adapter": "^0.3.5",
     "eslint": "^8.56.0",
-    "is-ip": "^3.1.0",
-    "lodash-es": ">=4.17.15",
     "prettier": "^3.1.1",
-    "qs": "^6.11.2",
     "rimraf": "^5.0.5",
     "rollup": "^2.54.0",
     "rollup-plugin-commonjs": "^10.1.0",
