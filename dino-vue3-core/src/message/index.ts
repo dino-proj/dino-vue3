@@ -9,9 +9,24 @@ export declare type MessageFun = (msg: string, options?: any) => void
  * 消息提示接口
  */
 export interface MessageHandler {
+  /**
+   * 成功消息
+   */
   success: MessageFun
+
+  /**
+   * 普通消息
+   */
   info: MessageFun
+
+  /**
+   * 警告消息
+   */
   warning: MessageFun
+
+  /**
+   * 错误消息
+   */
   error: MessageFun
 }
 
