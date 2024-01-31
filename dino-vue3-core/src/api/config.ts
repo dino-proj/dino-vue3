@@ -18,17 +18,17 @@ export interface ApiConfig {
   /**
    * 接口请求超时时间(毫秒)，默认：-1，表示不设置超时
    */
-  requestTimeout: number
+  requestTimeout?: number
 
   /**
    * 接口成功返回状态码，默认：0
    */
-  successCode: number | number[]
+  successCode?: number | number[]
 
   /**
    * 需要重新登录的状态码，默认：630
    */
-  needLoginCode: number | number[]
+  needLoginCode?: number | number[]
 
   /**
    * 获取租户信息函数
@@ -87,16 +87,27 @@ export type RequestProvider = (config: ApiConfig) => HttpRequest
 
 let apiConfig: ApiConfig = { ...defaultApiConfig }
 let request: HttpRequest = null
+
+export interface ApiOptions {
+  /**
+   * 请求提供函数
+   */
+  requesterProvider: RequestProvider
+
+  /**
+   * api配置
+   */
+  config: ApiConfig
+}
+
 /**
  * 配置API
  * @param config api配置
  */
-export const setupApi = (requestProvider: RequestProvider, config?: Partial<ApiConfig>) => {
-  if (config) {
-    apiConfig = extend(apiConfig, config)
-  }
+export const setupApi = (options: ApiOptions) => {
+  apiConfig = extend(apiConfig, options.config)
 
-  request = requestProvider(apiConfig)
+  request = options.requesterProvider(apiConfig)
 }
 
 export const useRequest = (): HttpRequest => {
