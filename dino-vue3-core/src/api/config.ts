@@ -92,7 +92,7 @@ export interface ApiOptions {
   /**
    * 请求提供函数
    */
-  requesterProvider: RequestProvider
+  requestProvider: RequestProvider
 
   /**
    * api配置
@@ -107,7 +107,7 @@ export interface ApiOptions {
 export const setupApi = (options: ApiOptions) => {
   apiConfig = extend(apiConfig, options.config)
 
-  request = options.requesterProvider(apiConfig)
+  request = options.requestProvider(apiConfig)
 }
 
 export const useRequest = (): HttpRequest => {
