@@ -20,7 +20,32 @@ export interface MessageHandler {
  */
 export type MessageType = `${string & keyof MessageHandler}`
 
-let msg: MessageHandler
+/**
+ * 消息处理函数, 默认使用console
+ */
+export const consoleMessageHandler: MessageHandler = {
+  success: (msg) => {
+    console.log('success: ' + msg)
+  },
+  info: (msg) => {
+    console.log('info: ' + msg)
+  },
+  warning: (msg) => {
+    console.warn('warn: ' + msg)
+  },
+  error: (msg) => {
+    console.error('error: ' + msg)
+  }
+}
+
+export interface MessageOptions {
+  /**
+   * 消息处理函数
+   */
+  messageHandler: MessageHandler
+}
+
+let msg: MessageHandler = consoleMessageHandler
 
 /**
  * 使用消息函数，用来显示提示消息
@@ -44,6 +69,6 @@ export function useMessage(msgType?: MessageType): MessageFun | MessageHandler {
  * 设置消息处理对象
  * @param _msg
  */
-export const setupMessage = (_msg: MessageHandler): void => {
-  msg = _msg
+export const setupMessage = (options: MessageOptions): void => {
+  msg = options.messageHandler
 }
