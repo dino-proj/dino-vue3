@@ -258,23 +258,28 @@ export interface ApiRequestConfig extends Omit<RequestConfig, 'param'> {
  * ApiGetConfig 接口用于定义 GET 请求的配置项。
  * @extends RequestConfig
  */
-export interface ApiGetConfig extends Omit<ApiRequestConfig, 'method' | 'data'> {}
+export interface ApiGetConfig<PARAM = ApiParamType> extends Omit<ApiRequestConfig, 'method' | 'data'> {
+  /**
+   * 请求的参数。
+   */
+  params?: PARAM
+}
 
 /**
  * ApiPostConfig 接口用于定义 POST 请求的配置项。
  * @extends ApiRequestConfig
  */
-export interface ApiPostConfig extends ApiGetConfig {
+export interface ApiPostConfig<DATA = ApiParamType, PARAM = ApiParamType> extends ApiGetConfig<PARAM> {
   /**
    * 请求的数据。
    */
-  data: ApiParamType
+  data: DATA
 }
 
 /**
  * 上传文件Api的配置类型
  */
-export interface ApiUploadConfig extends ApiGetConfig {
+export interface ApiUploadConfig<PARAM = ApiParamType> extends ApiGetConfig<PARAM> {
   /**
    * 上传的数据
    */

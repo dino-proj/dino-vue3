@@ -120,7 +120,7 @@ export interface ApiService {
   /**
    * 服务名称
    */
-  serviceName: string
+  readonly serviceName: string
 
   /**
    * Api配置
@@ -130,20 +130,9 @@ export interface ApiService {
   /**
    * 拦截器管理器
    */
-  interceptors: {
-    request: InterceptorManager<
-      RequestConfig,
-      {
-        apiService: ApiService
-      }
-    >
-    response: InterceptorManager<
-      HttpResponse,
-      {
-        requestConfig: RequestConfig
-        apiService: ApiService
-      }
-    >
+  readonly interceptors: {
+    readonly request: InterceptorManager<RequestConfig, { apiService: ApiService }>
+    readonly response: InterceptorManager<HttpResponse, { requestConfig: RequestConfig; apiService: ApiService }>
   }
 
   /**
@@ -372,15 +361,4 @@ export const useApi = (service?: string): ApiService => {
     throw new Error(`service=[${service}] not found ,Please call \`setupApi')\` before useRequest'`)
   }
   return serviceApi
-}
-
-/**
- * 获取服务Request
- * @param service 服务名称
- * @returns HttpRequst
- * @throws Error 如果服务未配置，则抛出错误
- */
-
-export const useRequest = (service?: string): HttpRequest => {
-  return useApi(service).request
 }

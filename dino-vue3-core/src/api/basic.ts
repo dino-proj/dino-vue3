@@ -3,7 +3,7 @@
 
 import { extend } from 'lodash-es'
 import { toCamleObject, toSnakeObject } from '../utils'
-import { useRequest } from './config'
+import { useApi } from './config'
 import {
   ApiRequestConfig,
   ApiGetConfig,
@@ -24,7 +24,7 @@ import {
  * @returns Promise对象
  */
 export const request = async <RESP>(config: ApiRequestConfig): Promise<RESP> => {
-  const request = useRequest(config.service)
+  const { request } = useApi(config.service)
 
   const headers: Record<string, string> = {
     'Content-Type': config.contentType || 'application/json',
