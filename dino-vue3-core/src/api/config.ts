@@ -36,13 +36,13 @@ export interface ApiConfig {
    * 获取租户信息函数
    * @returns null表示不需要租户信息
    */
-  tenant?: () => Tenant | undefined
+  tenant?: () => Promise<Tenant> | Tenant
 
   /**
    * 获取登录凭证函数
    * @returns null表示不需要登录凭证
    */
-  authToken?: () => AuthToken | undefined
+  authToken?: () => Promise<AuthToken> | AuthToken
 
   /**
    * 自动登录函数
@@ -221,8 +221,8 @@ function addInternalRequestInterceptor(serviceApi: ApiService) {
   })
 
   // 添加请求tenent_id参数拦截器
-  serviceApi.interceptors.request.use((request) => {
-    const tenant: Tenant = serviceApi.apiConfig.tenant()
+  serviceApi.interceptors.request.use(async (request) => {
+    const tenant: Tenant = await serviceApi.apiConfig.tenant()
     if (!isEmpty(tenant)) {
       request.url = request.url.replace('{tenant}', tenant.id)
       request.baseUrl = request.baseUrl.replace('{tenant}', tenant.id)
@@ -231,8 +231,8 @@ function addInternalRequestInterceptor(serviceApi: ApiService) {
   })
 
   // 添加请求token拦截器
-  serviceApi.interceptors.request.use((request) => {
-    const authToken = serviceApi.apiConfig.authToken()
+  serviceApi.interceptors.request.use(async (request) => {
+    const authToken = await serviceApi.apiConfig.authToken()
     if (authToken && request.withToken !== false) {
       request.headers[authToken.authHeaderName] = authToken.authPayload
     }
@@ -300,30 +300,31 @@ function addInternalResponseInterceptor(serviceApi: ApiService) {
 
 function addInterceptorCall(apiService: ApiService): void {
   const oldRequest = apiService.request
-  const newRequest: HttpRequest = (urlOrConfig: string | RequestConfig, config?: RequestConfig) => {
+  const newRequest: HttpRequest = async (urlOrConfig: string | RequestConfig, config?: RequestConfig) => {
     let requestConfig: RequestConfig = undefined
     if (isString(urlOrConfig)) {
       requestConfig = { ...config, url: urlOrConfig }
     } else {
       requestConfig = urlOrConfig
     }
-    return apiService.interceptors.request
-      .execute(requestConfig, {
-        apiService
-      })
-      .then((r) => {
-        return oldRequest(r)
-      })
-      .then((r) => {
-        const response = r as HttpResponse
-        const responseConfig = {
-          requestConfig,
-          apiService
-        }
-        return apiService.interceptors.response.execute(response, responseConfig)
-      })
+
+    // 执行请求拦截器
+    const r = await apiService.interceptors.request.execute(requestConfig, {
+      apiService
+    })
+
+    // 执行请求
+    const response = await oldRequest(r)
+
+    // 执行响应拦截器
+    const responseConfig = {
+      requestConfig,
+      apiService
+    }
+    return await apiService.interceptors.response.execute(response, responseConfig)
   }
 
+  // 替换request
   apiService.request = newRequest
 }
 
