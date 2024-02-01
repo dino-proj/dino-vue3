@@ -4,29 +4,43 @@
 import { extend } from 'lodash-es'
 import { toCamleObject, toSnakeObject } from '../utils'
 import { useRequest } from './config'
-import { ApiFetchConfig, ApiGetConfig, ApiPageResponse, ApiParamType, ApiPostConfig, ApiResponse, ApiUploadConfig, Pageable, Sortable } from './types'
+import {
+  ApiRequestConfig,
+  ApiGetConfig,
+  ApiPageResponse,
+  ApiParamType,
+  ApiPostConfig,
+  ApiResponse,
+  ApiUploadConfig,
+  Pageable,
+  RequestConfig,
+  Sortable,
+  OnProgressHandler
+} from './types'
 
 /**
- * fetch函数
+ * request函数
  * @param param 请求配置信息
  * @returns Promise对象
  */
-export const fetch = async <RESP>({ url, method, headers, params, data, contentType, responseType, timeout, onProgress, baseURL }: ApiFetchConfig): Promise<RESP> => {
-  const res = await useRequest()({
-    baseURL,
-    url,
-    method: method || 'get',
-    params: toSnakeObject(params),
-    data: data,
-    responseType: responseType,
-    headers: {
-      ...headers,
-      'Content-Type': contentType || 'application/json'
-    },
-    timeout,
-    onUploadProgress: onProgress,
-    onDownloadProgress: onProgress
-  })
+export const request = async <RESP>(config: ApiRequestConfig): Promise<RESP> => {
+  const request = useRequest(config.service)
+
+  const headers: Record<string, string> = {
+    'Content-Type': config.contentType || 'application/json',
+    ...config.headers
+  }
+
+  let requestConfig: RequestConfig<RESP> = {
+    ...config,
+    method: config.method || 'get',
+    params: toSnakeObject(config.params),
+    data: config.data,
+    headers
+  }
+
+  let res = await request<RESP>(requestConfig)
+
   if (res.status !== 200) {
     throw new Error(res.statusText)
   }
@@ -39,17 +53,10 @@ export const fetch = async <RESP>({ url, method, headers, params, data, contentT
  * @returns Promise对象
  */
 export const upload = <RESP>(config: ApiUploadConfig): Promise<ApiResponse<RESP>> => {
-  return fetch<ApiResponse<RESP>>({
-    url: config.url,
-    baseURL: config.baseURL,
+  return request<ApiResponse<RESP>>({
+    ...config,
     method: config.method || 'post',
-    headers: config.headers,
-    params: config.params,
-    data: config.data,
-    contentType: 'multipart/form-data',
-    responseType: config.responseType,
-    timeout: config.timeout | 3600000,
-    onProgress: config.onProgress
+    contentType: 'multipart/form-data'
   })
 }
 
@@ -59,14 +66,9 @@ export const upload = <RESP>(config: ApiUploadConfig): Promise<ApiResponse<RESP>
  * @returns
  */
 export const get = <RESP>(config: ApiGetConfig): Promise<ApiResponse<RESP>> => {
-  return fetch<ApiResponse<RESP>>({
-    url: config.url,
-    baseURL: config.baseURL,
-    method: 'get',
-    headers: config.headers,
-    params: config.params,
-    responseType: config.responseType,
-    timeout: config.timeout
+  return request<ApiResponse<RESP>>({
+    ...config,
+    method: 'get'
   })
 }
 
@@ -76,16 +78,10 @@ export const get = <RESP>(config: ApiGetConfig): Promise<ApiResponse<RESP>> => {
  * @returns
  */
 export const post = <RESP>(config: ApiPostConfig): Promise<ApiResponse<RESP>> => {
-  return fetch<ApiResponse<RESP>>({
-    url: config.url,
-    baseURL: config.baseURL,
+  return request<ApiResponse<RESP>>({
+    ...config,
     method: 'post',
-    headers: config.headers,
-    params: config.params,
-    data: { body: toSnakeObject(config.data) },
-    contentType: config.contentType,
-    responseType: config.responseType,
-    timeout: config.timeout
+    data: { body: toSnakeObject(config.data) }
   })
 }
 
@@ -96,14 +92,10 @@ export const post = <RESP>(config: ApiPostConfig): Promise<ApiResponse<RESP>> =>
  * @returns
  */
 export const getPage = <RESP>(config: ApiGetConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<RESP>> => {
-  return fetch<ApiPageResponse<RESP>>({
-    url: config.url,
-    baseURL: config.baseURL,
+  return request<ApiPageResponse<RESP>>({
+    ...config,
     method: 'get',
-    headers: config.headers,
-    params: extend(config.params, config.page, config.sort),
-    responseType: config.responseType,
-    timeout: config.timeout
+    params: extend(config.params, config.page, config.sort)
   })
 }
 
@@ -113,16 +105,11 @@ export const getPage = <RESP>(config: ApiGetConfig & { page: Pageable; sort?: So
  * @returns
  */
 export const postPage = <RESP>(config: ApiPostConfig & { page: Pageable; sort?: Sortable }): Promise<ApiPageResponse<RESP>> => {
-  return fetch<ApiPageResponse<RESP>>({
-    url: config.url,
-    baseURL: config.baseURL,
+  return request<ApiPageResponse<RESP>>({
+    ...config,
     method: 'post',
-    headers: config.headers,
     params: extend(config.params, config.page, config.sort),
-    data: { body: toSnakeObject(config.data) },
-    contentType: config.contentType,
-    responseType: config.responseType,
-    timeout: config.timeout
+    data: { body: toSnakeObject(config.data) }
   })
 }
 
@@ -137,9 +124,9 @@ export const postPage = <RESP>(config: ApiPostConfig & { page: Pageable; sort?: 
 export const defineUploadApi = <RESP = any, PARAM = ApiParamType>(
   config: Omit<ApiUploadConfig, 'params' | 'data'>,
   defaultParam?: Partial<PARAM>
-): ((data: FormData, params?: PARAM, onProgress?: ApiUploadConfig['onProgress']) => Promise<ApiResponse<RESP>>) => {
-  return (data: FormData, param?: PARAM, onProgress?: ApiUploadConfig['onProgress']): Promise<ApiResponse<RESP>> => {
-    return upload<RESP>({ ...config, params: extend({}, defaultParam, param), data, onProgress: onProgress ?? config.onProgress })
+): ((data: FormData, params?: PARAM, onProgress?: OnProgressHandler) => Promise<ApiResponse<RESP>>) => {
+  return (data: FormData, param?: PARAM, onProgress?: OnProgressHandler): Promise<ApiResponse<RESP>> => {
+    return upload<RESP>({ ...config, params: extend({}, defaultParam, param), data, ...onProgress })
   }
 }
 

@@ -96,36 +96,133 @@ export interface RequestProgressEvent {
   event?: any
 }
 
+/**
+ * 进度回调函数类型, 用于定义上传或下载进度回调函数
+ */
+export interface OnProgressHandler {
+  /**
+   * 上传进度回调函数
+   */
+  onUploadProgress?: (progressEvent: RequestProgressEvent) => void
+
+  /**
+   * 下载进度回调函数
+   */
+  onDownloadProgress?: (progressEvent: RequestProgressEvent) => void
+}
+
 export type RequestMethod = 'get' | 'GET' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'post' | 'POST' | 'put' | 'PUT'
 
 export type ResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 
-export interface RequestConfig<D = any> {
-  url?: string
-  method?: RequestMethod | string
-  baseURL?: string
+/**
+ * 请求接口的配置类型
+ * @template D 请求数据的类型，默认为 any
+ */
+export interface RequestConfig<D = any> extends OnProgressHandler {
+  /**
+   * 请求的 URL
+   */
+  url: string
+
+  /**
+   * 请求的方法
+   */
+  method: RequestMethod | string
+
+  /**
+   * 请求的基础 URL
+   */
+  baseUrl?: string
+
+  /**
+   * 请求的头部信息
+   */
   headers?: HttpHeaderType
+
+  /**
+   * 请求的参数
+   */
   params?: any
+
+  /**
+   * 请求的数据
+   */
   data?: D
+
+  /**
+   * 请求的超时时间
+   */
   timeout?: number
+
+  /**
+   * 是否携带凭证
+   */
   withCredentials?: boolean
+
+  /**
+   * 基本认证凭证
+   */
   auth?: BasicCredentials
+
+  /**
+   * 是否需要身份验证令牌
+   * - undifined || true: 需要
+   * - false: 不需要
+   * @default - undifined
+   */
+  withToken?: boolean
+
+  /**
+   * 响应的数据类型
+   */
   responseType?: ResponseType
+
+  /**
+   * 响应的编码方式
+   */
   responseEncoding?: string
-  onUploadProgress?: (progressEvent: RequestProgressEvent) => void
-  onDownloadProgress?: (progressEvent: RequestProgressEvent) => void
+
+  /**
+   * Socket 路径
+   */
   socketPath?: string | null
+
+  /**
+   * 传输方式
+   */
   transport?: any
+
+  /**
+   * 代理配置
+   */
   proxy?: ProxyConfig | false
 }
 
-export interface HttpResponse<T = any, D = any> {
-  data: T
+/**
+ * HTTP响应接口
+ * @template RESP_T 响应数据类型
+ */
+export interface HttpResponse<RESP_T = any> {
+  /**
+   * 响应数据
+   */
+  data: RESP_T
+
+  /**
+   * 响应状态码
+   */
   status: number
+
+  /**
+   * 响应状态文本
+   */
   statusText: string
+
+  /**
+   * 响应头部信息
+   */
   headers: HttpHeaderType
-  config: RequestConfig<D>
-  request?: HttpRequest
 }
 
 /**
@@ -137,53 +234,57 @@ export interface HttpRequest {
 }
 
 /**
- * Get请求的配置类型
- *
- * @example
- * const config: ApiGetConfig = {
- *  url: '/user/info',
- *  headers: {
- *   'X-Token': 'xxxxx'
- *  },
- *  params: {
- *   id: 1,
- *   name: 'dinos'
- *  }
- * }
+ * ApiGetConfig 接口用于定义 api 请求的配置项。
  */
-export interface ApiGetConfig {
-  url: string
-  headers?: HttpHeaderType
+export interface ApiRequestConfig extends Omit<RequestConfig, 'param'> {
+  /**
+   * 请求所属的api服务名称。
+   */
+  service: string
+
+  /**
+   * 请求的参数。
+   */
   params?: ApiParamType
-  responseType?: ResponseType
-  timeout?: number
-  baseURL?: string
+
+  /**
+   * 发送数据的内容类型
+   * @default 'application/json'
+   */
+  contentType?: string
 }
 
 /**
- * Post 请求的配置类型
+ * ApiGetConfig 接口用于定义 GET 请求的配置项。
+ * @extends RequestConfig
+ */
+export interface ApiGetConfig extends Omit<ApiRequestConfig, 'method' | 'data'> {}
+
+/**
+ * ApiPostConfig 接口用于定义 POST 请求的配置项。
+ * @extends ApiRequestConfig
  */
 export interface ApiPostConfig extends ApiGetConfig {
-  data?: ApiParamType
-  contentType?: string
+  /**
+   * 请求的数据。
+   */
+  data: ApiParamType
 }
 
 /**
  * 上传文件Api的配置类型
  */
 export interface ApiUploadConfig extends ApiGetConfig {
+  /**
+   * 上传的数据
+   */
   data: FormData
-  method?: 'post' | 'put'
-  onProgress?: (progress: RequestProgressEvent) => void
-}
 
-/**
- * Fetch请求
- */
-export interface ApiFetchConfig extends Omit<ApiPostConfig, 'data'> {
-  method: 'get' | 'post' | 'delete' | 'put'
-  data?: ApiParamType | FormData
-  onProgress?: (progress: RequestProgressEvent) => void
+  /**
+   * 请求方法，可选值为 'post' 或 'put'
+   * @default 'post'
+   */
+  method?: 'post' | 'put'
 }
 
 /**
@@ -236,10 +337,29 @@ export interface Cursorable {
 /**
  * Api请求响应类型
  */
+/**
+ * 表示 API 响应的接口。
+ * @template DataType - 数据类型参数。
+ */
 export interface ApiResponse<DataType> {
+  /**
+   * 响应的状态码。
+   */
   code: number
+
+  /**
+   * 响应的消息。
+   */
   msg: string
+
+  /**
+   * 响应的耗时，单位ms。
+   */
   cost: number
+
+  /**
+   * 响应的数据。
+   */
   data: DataType
 }
 
