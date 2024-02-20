@@ -81,7 +81,7 @@ export const defaultApiConfig: ApiConfig = {
   baseUrl: '',
   requestTimeout: -1,
   successCode: 0,
-  needLoginCode: [630],
+  needLoginCode: [602, 630],
   tenant: () => null,
   authToken: () => null,
   autoLogin: () => Promise.reject(false),
@@ -244,7 +244,7 @@ function addInternalResponseInterceptor(serviceApi: ApiService) {
   // 添加成功状态码拦截器
   serviceApi.interceptors.response.use((response) => {
     const data = response.data as ApiResponse<any>
-    if (successCode.indexOf(data.code) >= 0) {
+    if (successCode.indexOf(data.code) >= 0 || needLoginCode.indexOf(data.code) >= 0) {
       return response
     } else {
       return Promise.reject(response)
