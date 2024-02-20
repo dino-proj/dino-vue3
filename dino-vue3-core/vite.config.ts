@@ -25,6 +25,8 @@ export default defineConfig({
         // externals that should not be bundled
         'vue',
         '@vue/runtime-core',
+        '@vue/reactivity',
+        'pinia',
         'lodash-es',
         'axios',
         'uniapp-axios-adapter',
