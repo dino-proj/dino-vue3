@@ -60,8 +60,10 @@ export interface DinoLoginAuthInfo<K extends IdKeyType = string, U extends User<
 
 /**
  * LoginByRefreshTokenApi 接口定义了使用刷新令牌进行登录的 API 方法。
+ * @template K - IdKeyType 的类型参数，默认为 string。
+ * @template U - User 的类型参数，默认为 User<K>。
  */
-export type LoginByRefreshTokenApi = (refreshToken: string) => Promise<DinoLoginAuthInfo>
+export type LoginByRefreshTokenApi<K extends IdKeyType = string, U extends User<K> = User<K>> = (refreshToken: string) => Promise<DinoLoginAuthInfo<K, U>>
 
 /**
  * LogoutApi 接口定义了登出操作。
