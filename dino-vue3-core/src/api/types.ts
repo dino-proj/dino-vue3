@@ -240,7 +240,7 @@ export interface ApiRequestConfig extends Omit<RequestConfig, 'param'> {
   /**
    * 请求所属的api服务名称。
    */
-  service: string
+  service?: string
 
   /**
    * 请求的参数。
@@ -258,7 +258,7 @@ export interface ApiRequestConfig extends Omit<RequestConfig, 'param'> {
  * ApiGetConfig 接口用于定义 GET 请求的配置项。
  * @extends RequestConfig
  */
-export interface ApiGetConfig<PARAM = ApiParamType> extends Omit<ApiRequestConfig, 'method' | 'data'> {
+export interface ApiGetConfig<PARAM = ApiParamType> extends Omit<ApiRequestConfig, 'method' | 'data' | 'params'> {
   /**
    * 请求的参数。
    */
