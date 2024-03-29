@@ -56,6 +56,11 @@ export interface ApiConfig {
   onLoginExpired?: () => void
 
   /**
+   * Callback function to handle API errors.
+   */
+  onApiError?: (error: { status: number; code: number; message: string }) => void
+
+  /**
    * 接口请求默认的headers
    * @default {}
    */
@@ -241,12 +246,19 @@ function addInternalResponseInterceptor(serviceApi: ApiService) {
   const successCode: number[] = asArray(serviceApi.apiConfig.successCode)
   const needLoginCode: number[] = asArray(serviceApi.apiConfig.needLoginCode)
 
-  // 添加成功状态码拦截器
+  // 添加默认错误提示拦截器
   serviceApi.interceptors.response.use((response) => {
     const data = response.data as ApiResponse<any>
     if (successCode.indexOf(data.code) >= 0 || needLoginCode.indexOf(data.code) >= 0) {
       return response
     } else {
+      if (serviceApi.apiConfig.onApiError) {
+        serviceApi.apiConfig.onApiError({
+          status: response.status,
+          code: data.code,
+          message: data.msg
+        })
+      }
       return Promise.reject(response)
     }
   })
@@ -271,16 +283,6 @@ function addInternalResponseInterceptor(serviceApi: ApiService) {
           serviceApi.apiConfig.onLoginExpired()
           return Promise.reject(reason)
         })
-    } else {
-      return response
-    }
-  })
-
-  // 添加默认错误提示拦截器
-  serviceApi.interceptors.response.use((response) => {
-    const data = response.data as ApiResponse<any>
-    if (data.code !== 0) {
-      return Promise.reject(response)
     } else {
       return response
     }
